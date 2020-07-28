@@ -1,17 +1,18 @@
 {
-  "name": "polr",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "export": "nuxt export",
-    "serve": "nuxt serve"
-  },
-  "dependencies": {
-    "@nuxtjs/apollo": "^4.0.1-rc.1",
-    "nuxt": "^2.13.0"
-  },
-  "devDependencies": {}
+    "name": "polr",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "export": "nuxt export",
+        "serve": "nuxt serve",
+        "heroku-postbuild": "npm run build"
+    },
+    "dependencies": {
+        "@nuxtjs/apollo": "^4.0.1-rc.1",
+        "nuxt": "^2.13.0"
+    },
+    "devDependencies": {}
 }
