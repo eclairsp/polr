@@ -53,7 +53,11 @@ export default {
     /*
      ** Nuxt.js dev-modules
      */
-    buildModules: [],
+    buildModules: ["@nuxtjs/color-mode"],
+
+    colorMode: {
+        preference: "light" // default value of $colorMode.preference
+    },
     /*
      ** Nuxt.js modules
      */
@@ -63,7 +67,7 @@ export default {
         clientConfigs: {
             default: {
                 // required
-                httpEndpoint: "http://localhost:4000/",
+                httpEndpoint: "http://192.168.1.57:5000/",
                 // optional
                 // override HTTP endpoint in browser only
                 // optional
@@ -71,7 +75,7 @@ export default {
 
                 // You can use `wss` for secure connection (recommended in production)
                 // Use `null` to disable subscriptions
-                wsEndpoint: "ws://localhost:4000/", // optional
+                wsEndpoint: "ws://192.168.1.57:5000/", // optional
                 // LocalStorage token
                 tokenName: "apollo-token", // optional
                 // Enable Automatic Query persisting with Apollo Engine
@@ -86,7 +90,5 @@ export default {
      ** Build configuration
      ** See https://nuxtjs.org/api/configuration-build/
      */
-    build: {
-        analyze: true
-    }
+    build: {}
 };

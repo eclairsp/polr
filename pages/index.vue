@@ -1,16 +1,17 @@
 <template>
     <div>
-        <div v-if="$apollo.loading">
-            <loading />
-        </div>
-        <div v-else-if="error">
-            <error title="Can't get polls." description="Try later" />
-        </div>
-        <ul v-else>
-            <li v-for="(poll, index) in feed" :key="poll.id">
-                <card :index="index" :title="poll.url" :description="poll.description" />
+        <loading v-if="$apollo.loading" />
+        <error @retry="retry" v-else-if="error" title="Can't get polls." description="Try later" />
+        <transition-group v-else name="list" appear tag="ul">
+            <li v-for="poll in feed" :key="poll.id">
+                <card
+                    v-if="!$apollo.loading && !error"
+                    :index="parseInt(poll.id)"
+                    :title="poll.url"
+                    :description="poll.description"
+                />
             </li>
-        </ul>
+        </transition-group>
     </div>
 </template>
 
@@ -45,6 +46,7 @@ export default {
             error: null,
         };
     },
+
     components: {
         card: card,
         loading: loading,
@@ -57,12 +59,11 @@ export default {
                 {
                     document: NEW_LINKS_SUBSCRIPTION,
                     updateQuery: (previous, { subscriptionData }) => {
-                        console.log(previous, subscriptionData);
                         if (!subscriptionData.data.newLink) return;
 
                         const newFeed = [
-                            ...previous.feed,
                             subscriptionData.data.newLink,
+                            ...previous.feed,
                         ];
                         const result = {
                             ...previous,
@@ -75,6 +76,12 @@ export default {
             error(error) {
                 this.error = JSON.stringify(error.message);
             },
+        },
+    },
+    methods: {
+        retry: function () {
+            this.error = null;
+            this.$apollo.queries.feed.refetch();
         },
     },
 };

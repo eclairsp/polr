@@ -12,7 +12,10 @@
     },
     "dependencies": {
         "@nuxtjs/apollo": "^4.0.1-rc.1",
+        "@nuxtjs/now-builder": "^0.17.3",
         "nuxt": "^2.13.0"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "@nuxtjs/color-mode": "^1.0.2"
+    }
 }

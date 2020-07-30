@@ -3,7 +3,7 @@
         <h3 class="poll--card--title">
             <nuxt-link
                 class="poll--card--title--link"
-                :to="{ name: 'poll-id', params: { id: index+1 }}"
+                :to="{ name: 'poll-id', params: { id: index }}"
             >{{title}}</nuxt-link>
         </h3>
 
@@ -27,7 +27,8 @@ export default {
     background: var(--card-bg);
     color: var(--text-color);
     padding: 10px;
-    margin: 10px 0;
+    box-shadow: 0px 2px 10px 0.5px var(--shadow);
+    margin: 12px 10px;
 }
 
 .poll--card--title {

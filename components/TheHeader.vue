@@ -1,7 +1,9 @@
 <template>
     <header>
-        <h1 class="logo--heading">polr</h1>
-        <transition name="fade">
+        <nuxt-link class="logo--heading--link" to="/">
+            <h1 class="logo--heading">polr</h1>
+        </nuxt-link>
+        <transition name="theme">
             <h1 v-if="root" class="page--name">{{routeName.toUpperCase()}}</h1>
         </transition>
     </header>
@@ -44,8 +46,7 @@ header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 10px;
-    padding-bottom: 25px;
+    padding: 15px 10px 15px 10px;
 }
 
 h1 {
@@ -54,11 +55,19 @@ h1 {
 
 .page--name {
     margin-right: 10px;
-    font-size: 2em;
-    color: var(--primary-2);
+    font-size: 1.5em;
+    color: var(--primary-1);
 }
 
 .logo--heading {
-    font-size: 4em;
+    font-size: 3em;
+}
+
+.logo--heading--link,
+.logo--heading--link:active,
+.logo--heading--link:hover,
+.logo--heading--link:visited {
+    color: var(--text-color-headline);
+    text-decoration: none;
 }
 </style>

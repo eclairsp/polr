@@ -2,6 +2,7 @@
     <section class="poll--card">
         <h3 class="poll--card--title">{{title}}</h3>
         <p class="poll--card--description">{{description}}</p>
+        <button @click="retry" class="poll--card--error--btn">Retry</button>
     </section>
 </template>
 
@@ -10,6 +11,11 @@ export default {
     props: {
         title: String,
         description: String,
+    },
+    methods: {
+        retry: function () {
+            this.$emit("retry");
+        },
     },
 };
 </script>
@@ -21,7 +27,8 @@ export default {
     color: var(--text-color);
     border: 2px solid var(--error);
     padding: 10px;
-    margin: 10px 0;
+    box-shadow: 0px 5px 10px 0.2px var(--shadow);
+    margin: 10px 10px;
 }
 
 .poll--card--title {
@@ -32,5 +39,15 @@ export default {
 
 .poll--card--description {
     font-size: 1.2em;
+}
+
+.poll--card--error--btn {
+    background: var(--card-bg);
+    border: 2px solid var(--error);
+    font-size: 1.5em;
+    padding: 10px;
+    color: var(--error);
+    border-radius: 5px;
+    margin: 10px 0 0 0;
 }
 </style>

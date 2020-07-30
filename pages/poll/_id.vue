@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h1 v-if="$apollo.loading">Loading...</h1>
-        <h1 v-else-if="error">Error Occured</h1>
+        <loading v-if="$apollo.loading" />
+        <error v-else-if="error" @retry="retry" :title="error" description="Try later" />
         <div v-else>
             <h1>{{link.url}}</h1>
             <p>{{link.description}}</p>
@@ -11,6 +11,9 @@
 
 <script>
 import gql from "graphql-tag";
+import loading from "../../components/loading";
+import error from "../../components/error";
+
 const ALL_FEEDS_QUERY = gql`
     query Link($id: ID!) {
         link(id: $id) {
@@ -20,10 +23,14 @@ const ALL_FEEDS_QUERY = gql`
         }
     }
 `;
+
 export default {
     data() {
         return {
-            link: {},
+            link: {
+                url: "Poll",
+                description: "Vote on a poll",
+            },
             error: null,
         };
     },
@@ -44,9 +51,36 @@ export default {
                 };
             },
             error(error) {
-                this.error = JSON.stringify(error.message);
+                if (error.message === "GraphQL error: No poll found") {
+                    this.error = "No poll found";
+                } else {
+                    this.error = JSON.stringify(error.message);
+                }
             },
         },
+    },
+    components: {
+        loading: loading,
+        error: error,
+    },
+    methods: {
+        retry: function () {
+            this.skipQuery = false;
+            this.$apollo.queries.feed.refetch();
+        },
+    },
+    head() {
+        return {
+            title: `${this.link.url} | polr`,
+            meta: [
+                // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+                {
+                    hid: "description",
+                    name: "description",
+                    content: this.link.description,
+                },
+            ],
+        };
     },
 };
 </script>
