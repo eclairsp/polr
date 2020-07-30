@@ -55,24 +55,24 @@ export default {
     apollo: {
         feed: {
             query: ALL_FEEDS_QUERY,
-            subscribeToMore: [
-                {
-                    document: NEW_LINKS_SUBSCRIPTION,
-                    updateQuery: (previous, { subscriptionData }) => {
-                        if (!subscriptionData.data.newLink) return;
+            // subscribeToMore: [
+            //     {
+            //         document: NEW_LINKS_SUBSCRIPTION,
+            //         updateQuery: (previous, { subscriptionData }) => {
+            //             if (!subscriptionData.data.newLink) return;
 
-                        const newFeed = [
-                            subscriptionData.data.newLink,
-                            ...previous.feed,
-                        ];
-                        const result = {
-                            ...previous,
-                            feed: newFeed,
-                        };
-                        return result;
-                    },
-                },
-            ],
+            //             const newFeed = [
+            //                 subscriptionData.data.newLink,
+            //                 ...previous.feed,
+            //             ];
+            //             const result = {
+            //                 ...previous,
+            //                 feed: newFeed,
+            //             };
+            //             return result;
+            //         },
+            //     },
+            // ],
             error(error) {
                 this.error = JSON.stringify(error.message);
             },

@@ -75,7 +75,7 @@ export default {
 
                 // You can use `wss` for secure connection (recommended in production)
                 // Use `null` to disable subscriptions
-                wsEndpoint: "ws://192.168.1.57:5000/", // optional
+                // wsEndpoint: "ws://192.168.1.57:5000/", // optional
                 // LocalStorage token
                 tokenName: "apollo-token", // optional
                 // Enable Automatic Query persisting with Apollo Engine
