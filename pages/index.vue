@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loading v-if="$apollo.loading" />
+        <loading v-if="loading" />
         <error @retry="retry" v-else-if="error" title="Can't get polls." description="Try later" />
         <transition-group v-else name="list" appear tag="ul">
             <li v-for="poll in feed" :key="poll.id">
@@ -43,7 +43,8 @@ export default {
     data() {
         return {
             feed: [],
-            error: null,
+            error: true,
+            loading: false,
         };
     },
 
@@ -52,32 +53,32 @@ export default {
         loading: loading,
         error: error,
     },
-    apollo: {
-        feed: {
-            query: ALL_FEEDS_QUERY,
-            // subscribeToMore: [
-            //     {
-            //         document: NEW_LINKS_SUBSCRIPTION,
-            //         updateQuery: (previous, { subscriptionData }) => {
-            //             if (!subscriptionData.data.newLink) return;
+    // apollo: {
+    //     feed: {
+    //         query: ALL_FEEDS_QUERY,
+    //         subscribeToMore: [
+    //             {
+    //                 document: NEW_LINKS_SUBSCRIPTION,
+    //                 updateQuery: (previous, { subscriptionData }) => {
+    //                     if (!subscriptionData.data.newLink) return;
 
-            //             const newFeed = [
-            //                 subscriptionData.data.newLink,
-            //                 ...previous.feed,
-            //             ];
-            //             const result = {
-            //                 ...previous,
-            //                 feed: newFeed,
-            //             };
-            //             return result;
-            //         },
-            //     },
-            // ],
-            error(error) {
-                this.error = JSON.stringify(error.message);
-            },
-        },
-    },
+    //                     const newFeed = [
+    //                         subscriptionData.data.newLink,
+    //                         ...previous.feed,
+    //                     ];
+    //                     const result = {
+    //                         ...previous,
+    //                         feed: newFeed,
+    //                     };
+    //                     return result;
+    //                 },
+    //             },
+    //         ],
+    //         error(error) {
+    //             this.error = JSON.stringify(error.message);
+    //         },
+    //     },
+    // },
     methods: {
         retry: function () {
             this.error = null;

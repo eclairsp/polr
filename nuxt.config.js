@@ -67,7 +67,7 @@ export default {
         clientConfigs: {
             default: {
                 // required
-                httpEndpoint: "http://192.168.1.57:5000/",
+                // httpEndpoint: "http://192.168.1.57:5000/",
                 // optional
                 // override HTTP endpoint in browser only
                 // optional
