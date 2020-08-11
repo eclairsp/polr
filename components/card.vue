@@ -16,7 +16,7 @@ export default {
     props: {
         title: String,
         description: String,
-        index: Number,
+        index: String,
     },
 };
 </script>
@@ -27,7 +27,7 @@ export default {
     background: var(--card-bg);
     color: var(--text-color);
     padding: 10px;
-    box-shadow: 0px 2px 10px 0.5px var(--shadow);
+    box-shadow: 0px 5px 10px var(--shadow);
     margin: 12px 10px;
 }
 

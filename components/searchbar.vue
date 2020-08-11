@@ -30,6 +30,7 @@ export default {
     display: flex;
     border-radius: 10px;
     box-shadow: 0px 2px 10px 0.2px var(--shadow);
+    margin: 10px 0 10px 0;
 }
 
 .search--input {
@@ -48,6 +49,7 @@ export default {
 }
 
 .search--button {
+    cursor: pointer;
     width: 20%;
     background: var(--primary-3);
     border: none;
@@ -64,5 +66,14 @@ export default {
     width: 35px;
     fill: none;
     stroke: var(--bg);
+}
+
+@media screen and (min-width: 1336px) {
+    .search--input {
+        width: 90%;
+    }
+    .search--button {
+        width: 10%;
+    }
 }
 </style>

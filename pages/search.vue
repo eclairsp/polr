@@ -1,8 +1,9 @@
 <template>
     <section>
         <searchbar
-            @clicked="enter"
-            @enter="enter"
+            @typing="searchFire"
+            @clicked="searchFire"
+            @enter="searchFire"
             v-bind:value="searchQuery"
             v-on:input="searchQuery = $event"
             placeholder="Search..."
@@ -22,24 +23,64 @@
                 />
             </svg>
         </searchbar>
-        <h1>{{searchQuery}}</h1>
+        <transition-group name="list" appear tag="ul">
+            <li v-for="poll in search" :key="poll._id">
+                <card
+                    v-if="!$apollo.loading && !error"
+                    :index="poll._id"
+                    :title="poll.title"
+                    :description="poll.description"
+                />
+            </li>
+        </transition-group>
     </section>
 </template>
 
 <script>
+import gql from "graphql-tag";
+import debounce from "lodash.debounce";
 import searchbar from "../components/searchbar";
+
+const SEARCH_QUERY = gql`
+    query Search($query: String!) {
+        search(query: $query) {
+            _id
+            title
+            description
+        }
+    }
+`;
+
 export default {
     data() {
         return {
             searchQuery: "",
+            search: [],
         };
     },
     components: {
         searchbar: searchbar,
     },
     methods: {
-        enter: function () {
-            this.searchQuery = "Enter";
+        searchFire: debounce(function () {
+            this.error = null;
+            this.$apollo.queries.search.skip = false;
+            this.$apollo.queries.search.refetch();
+        }, 500),
+    },
+    apollo: {
+        search: {
+            query: SEARCH_QUERY,
+            variables() {
+                // Use vue reactive properties here
+                return {
+                    query: this.searchQuery,
+                };
+            },
+            error(error) {
+                this.error = JSON.stringify(error.message);
+            },
+            skip: true,
         },
     },
     head() {

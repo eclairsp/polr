@@ -13,7 +13,7 @@
                 @click="toggle"
                 v-model="flag"
             />
-            <span class="ball"></span>
+            <section :class="ballClass"></section>
         </div>
     </div>
 </template>
@@ -23,11 +23,19 @@ export default {
     data() {
         return {
             flag: false,
+            ballClass: "ball false",
         };
     },
     methods: {
         toggle: function () {
-            this.flag = !this.flag;
+            if (this.flag) {
+                this.ballClass = "ball false";
+                this.flag = false;
+            } else {
+                this.ballClass = "ball true";
+                this.flag = true;
+                this.indicator = "Y";
+            }
             this.$emit("toggled");
         },
     },
@@ -44,7 +52,7 @@ export default {
 
 label {
     font-size: 1.75em;
-    margin: 0 0 10px 0;
+    margin: 10px 0 10px 0;
     color: var(--text-color-headline);
 }
 
@@ -74,12 +82,21 @@ label {
 }
 
 .ball {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 30px;
     height: 30px;
     border-radius: 100px;
+    transition: 0.5s transform, 0.5s background;
+}
+
+.false {
+    background: var(--error);
+}
+
+.true {
     background: var(--primary-2);
-    transition: 0.5s transform;
 }
 
 .theme--check--switch:checked ~ .ball {

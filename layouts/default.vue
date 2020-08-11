@@ -61,7 +61,7 @@ export default {
 
 .nuxt--container {
     background: var(--bg-blur);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(1px);
     padding: 10px;
     min-height: calc(100vh - 83px);
     border-top-left-radius: 20px;

@@ -31,7 +31,7 @@
     --shadow: rgba(22, 30, 50, 0.2);
 
     --nav-bg: #2d303a;
-    --card-bg: #131519;
+    --card-bg: #131519ce;
     --bg: #101010;
     --bg-blur: rgba(0, 0, 0, 0.5);
 }
@@ -50,7 +50,7 @@
     --shadow: rgba(22, 30, 50, 0.2);
 
     --nav-bg: #fff;
-    --card-bg: #fff;
+    --card-bg: #ffffffc9;
     --bg: #fff;
     --bg-blur: rgba(189, 186, 186, 0.603);
 }

@@ -12,12 +12,12 @@
 
         <toggle @toggled="changePrivate">Private</toggle>
         <transition name="fade">
-            <label v-if="privateList" key="label" for="password">Password</label>
+            <label v-if="privatePoll" key="label" for="password">Password</label>
         </transition>
         <transition name="fade">
             <textInput
                 :class="errorClass[1]"
-                v-if="privateList"
+                v-if="privatePoll"
                 key="passwordInput"
                 id="password"
                 v-bind:value="password"
@@ -98,6 +98,8 @@
             </svg>
         </searchbar>
 
+        <toggle @toggled="changeMultiple">Multiple Options</toggle>
+
         <btn class @clicked="submitList">Submit List</btn>
         <transition name="fade">
             <section class="error--message" v-if="errorMessage">
@@ -110,21 +112,50 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
 import textInput from "../components/textInput";
 import btn from "../components/btn";
 import toggle from "../components/toggle";
 import searchbar from "../components/searchbar";
+
+const NEW_POLL = gql`
+    mutation createPoll(
+        $title: String!
+        $description: String!
+        $privatePoll: Boolean!
+        $multipleOption: Boolean!
+        $password: String!
+        $options: [String!]
+    ) {
+        createPoll(
+            input: {
+                title: $title
+                description: $description
+                privatePoll: $privatePoll
+                multipleOption: $multipleOption
+                password: $password
+                options: $options
+            }
+        ) {
+            _id
+            title
+            privatePoll
+        }
+    }
+`;
+
 export default {
     data() {
         return {
             options: [],
             option: "",
-            privateList: false,
+            privatePoll: false,
             title: "",
             description: "",
             password: "",
             errorClass: ["", "", "", ""],
             errorMessage: "",
+            multipleOption: false,
         };
     },
     head() {
@@ -153,17 +184,18 @@ export default {
                 return;
             }
             this.options.push(this.option);
+            this.option = "";
         },
         removeOption: function (index) {
             this.options.splice(index, 1);
         },
-        submitList: function () {
+        submitList: async function () {
             if (this.title.length === 0) {
                 this.errorMessage = "No blank title.";
                 this.changeErrorClass(0);
                 return;
             }
-            if (this.privateList) {
+            if (this.privatePoll) {
                 if (this.password.length === 0) {
                     this.errorMessage = "No blank password.";
                     this.changeErrorClass(1);
@@ -176,7 +208,7 @@ export default {
                     return;
                 }
             }
-            if (this.option.length === 0) {
+            if (this.options.length === 0) {
                 this.errorMessage = "No blank option.";
                 this.changeErrorClass(3);
                 return;
@@ -187,11 +219,48 @@ export default {
                 return;
             }
 
+            //no error
             this.changeErrorClass(5);
-            console.log("Success");
+
+            if (!this.privatePoll) {
+                this.password = "password";
+            }
+
+            const {
+                title,
+                description,
+                privatePoll,
+                multipleOption,
+                password,
+                options,
+            } = this;
+            const result = await this.$apollo.mutate({
+                // Query
+                mutation: NEW_POLL,
+                // Parameters
+                variables: {
+                    title,
+                    description,
+                    privatePoll,
+                    multipleOption,
+                    password,
+                    options,
+                },
+            });
+            if (result.data.createPoll.privatePoll) {
+                this.$router.push({
+                    name: "poll-id",
+                    params: { id: result.data.createPoll._id },
+                });
+            } else {
+                this.$router.push({
+                    name: "poll-id",
+                    params: { id: result.data.createPoll._id },
+                });
+            }
         },
         changePrivate: function () {
-            this.privateList = !this.privateList;
+            this.privatePoll = !this.privatePoll;
         },
         changeErrorClass: function (index) {
             if (index > this.errorClass.length) this.errorMessage = "";
@@ -203,6 +272,9 @@ export default {
         refreshInput: function () {
             this.errorClass = ["", "", "", ""];
             this.errorMessage = "";
+        },
+        changeMultiple: function () {
+            this.multipleOption = !this.multipleOption;
         },
     },
     components: {
@@ -234,11 +306,12 @@ textarea {
     padding: 10px;
     border-radius: 10px;
     margin: 0 0 10px 0;
+    resize: vertical;
 }
 
 label {
     font-size: 1.75em;
-    margin: 0 0 10px 0;
+    margin: 10px 0 10px 0;
     color: var(--text-color-headline);
 }
 

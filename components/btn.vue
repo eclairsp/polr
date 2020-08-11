@@ -1,5 +1,5 @@
 <template>
-    <button v-on:click="$emit('clicked')">
+    <button class="btn" v-on:click="$emit('clicked')">
         <slot></slot>
     </button>
 </template>
@@ -13,7 +13,8 @@ export default {
 </script>
 
 <style scoped>
-button {
+.btn {
+    cursor: pointer;
     background: var(--primary-3);
     border: none;
     color: var(--text-color-headline);
@@ -33,5 +34,10 @@ button {
 
 .btn--not--full {
     width: max-content;
+}
+
+.vote--btn {
+    font-size: 1em;
+    margin: 10px 10px;
 }
 </style>

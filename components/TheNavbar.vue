@@ -2,7 +2,7 @@
     <transition name="nav" mode="out-in">
         <nav key="full" v-if="full">
             <ul class="nav--bar">
-                <li class="nav--bar--item">
+                <li @click="collapse" class="nav--bar--item">
                     <nuxt-link v-if="full" to="/">
                         <svg
                             class="nav--bar--icons"
@@ -25,7 +25,7 @@
                         </svg>
                     </nuxt-link>
                 </li>
-                <li class="nav--bar--item">
+                <li @click="collapse" class="nav--bar--item">
                     <nuxt-link v-if="full" :to="{name: 'search'}">
                         <svg
                             class="nav--bar--icons"
@@ -47,7 +47,7 @@
                         </svg>
                     </nuxt-link>
                 </li>
-                <li class="nav--bar--item">
+                <li @click="collapse" class="nav--bar--item">
                     <nuxt-link v-if="full" :to="{ name: 'add'}">
                         <svg
                             class="nav--bar--icons"
@@ -238,7 +238,7 @@ nav {
     margin-right: auto;
     margin-left: auto;
     padding: 10px;
-    box-shadow: 0 5px 40px 5px var(--shadow);
+    box-shadow: 5px 5px 20px #00000080;
     z-index: 10;
     overflow: hidden;
 }

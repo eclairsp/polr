@@ -42,6 +42,7 @@ export default {
 }
 
 .poll--card--error--btn {
+    cursor: pointer;
     background: var(--card-bg);
     border: 2px solid var(--error);
     font-size: 1.5em;

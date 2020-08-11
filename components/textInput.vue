@@ -21,7 +21,6 @@ export default {
 
 <style scoped>
 input {
-    width: 100%;
     font-size: 1.5em;
     color: var(--text-color);
     background: var(--card-bg);
@@ -29,7 +28,7 @@ input {
     border: none;
     padding: 10px;
     border-radius: 10px;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
 }
 
 .input--error {
