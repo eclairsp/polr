@@ -67,7 +67,7 @@ export default {
         clientConfigs: {
             default: {
                 // required
-                httpEndpoint: "http://localhost:5000/graphql",
+                httpEndpoint: "https://polr-api.herokuapp.com/graphql",
                 // optional
                 // override HTTP endpoint in browser only
                 // optional
@@ -75,7 +75,7 @@ export default {
 
                 // You can use `wss` for secure connection (recommended in production)
                 // Use `null` to disable subscriptions
-                wsEndpoint: "ws://localhost:5000/graphql", // optional
+                wsEndpoint: "wss://polr-api.herokuapp.com/graphql", // optional
                 // LocalStorage token
                 tokenName: "apollo-token", // optional
                 // Enable Automatic Query persisting with Apollo Engine
