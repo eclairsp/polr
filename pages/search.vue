@@ -3,7 +3,7 @@
         <searchbar
             @typing="searchFire"
             @clicked="searchFire"
-            @enter="searchFire"
+            @enter="searchBtn"
             v-bind:value="searchQuery"
             v-on:input="searchQuery = $event"
             placeholder="Search..."
@@ -23,6 +23,7 @@
                 />
             </svg>
         </searchbar>
+        <loading v-if="$apollo.queries.search.loading" :full="false" />
         <transition-group name="list" appear tag="ul">
             <li v-for="poll in search" :key="poll._id">
                 <card
@@ -33,6 +34,7 @@
                 />
             </li>
         </transition-group>
+        <h1 v-if="!$apollo.queries.search.loading && noneFound">No poll found</h1>
     </section>
 </template>
 
@@ -40,6 +42,7 @@
 import gql from "graphql-tag";
 import debounce from "lodash.debounce";
 import searchbar from "../components/searchbar";
+import loading from "../components/loading";
 
 const SEARCH_QUERY = gql`
     query Search($query: String!) {
@@ -56,17 +59,25 @@ export default {
         return {
             searchQuery: "",
             search: [],
+            noneFound: false,
         };
     },
     components: {
-        searchbar: searchbar,
+        searchbar,
+        loading,
     },
     methods: {
         searchFire: debounce(function () {
             this.error = null;
+            this.noneFound = false;
             this.$apollo.queries.search.skip = false;
             this.$apollo.queries.search.refetch();
-        }, 500),
+        }, 200),
+        searchBtn: function () {
+            this.noneFound = false;
+            this.$apollo.queries.search.skip = false;
+            this.$apollo.queries.search.refetch();
+        },
     },
     apollo: {
         search: {
@@ -79,6 +90,11 @@ export default {
             },
             error(error) {
                 this.error = JSON.stringify(error.message);
+            },
+            result(res, key) {
+                if (key === "search" && res.data.search.length === 0) {
+                    this.noneFound = true;
+                }
             },
             skip: true,
         },

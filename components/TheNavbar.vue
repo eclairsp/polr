@@ -181,9 +181,19 @@
                         viewBox="0 0 512 512"
                     >
                         <title>Minimize</title>
-                        <polyline
-                            points="184 112 328 256 184 400"
-                            style="stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"
+                        <line
+                            x1="412"
+                            y1="412"
+                            x2="100"
+                            y2="100"
+                            style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                        />
+                        <line
+                            x1="412"
+                            y1="100"
+                            x2="100"
+                            y2="412"
+                            style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
                         />
                     </svg>
                 </li>
@@ -200,9 +210,26 @@
                         class="nav--bar--icons"
                     >
                         <title>Open Menu</title>
-                        <polyline
-                            points="328 112 184 256 328 400"
-                            style="stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"
+                        <line
+                            x1="80"
+                            y1="160"
+                            x2="432"
+                            y2="160"
+                            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+                        />
+                        <line
+                            x1="80"
+                            y1="256"
+                            x2="432"
+                            y2="256"
+                            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+                        />
+                        <line
+                            x1="80"
+                            y1="352"
+                            x2="432"
+                            y2="352"
+                            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
                         />
                     </svg>
                 </li>
@@ -274,7 +301,7 @@ nav {
 
 .nav--bar--icons {
     height: 30px;
-    width: 30x;
+    width: 30px;
     fill: none;
     stroke: var(--primary-2);
 }

@@ -1,6 +1,6 @@
 <template>
     <section class="id">
-        <loading v-if="$apollo.queries.poll.loading" />
+        <loading :full="true" v-if="$apollo.queries.poll.loading" />
         <error v-else-if="error" @retry="retry" :title="error" description="Try later" />
         <div class="poll--info" v-else>
             <h1 class="poll--title">{{poll.title}}</h1>
@@ -45,10 +45,16 @@
         <btn v-if="!error && !$apollo.queries.poll.loading" @clicked="vote()" class="vote--btn">Vote</btn>
 
         <transition name="fade" mode="out-in">
-            <figure id="result" v-if="!error && !$apollo.queries.poll.loading && showResults">
+            <section v-if="voting" class="result">
+                <loading :full="false" />
+            </section>
+            <figure
+                id="result"
+                v-if="!error && !$apollo.queries.poll.loading && showResults && !voting"
+            >
                 <figcaption>
-                    <span>Results</span>
-                    <ul>
+                    <h1 class="result--title">Results</h1>
+                    <ul class="result--list">
                         <li
                             class="result--item"
                             v-for="(color, index) in optionsColors"
@@ -73,14 +79,17 @@
                     <g v-for="(data, index) in poll.options" class="bar" :key="data.option">
                         <rect
                             stroke="black"
+                            stroke-alignment="inside"
                             :fill="optionsColors[index]"
-                            :width="`${(data.vote / max) * 100}%`"
+                            :width="`${((data.vote / max) * 100) - 1}%`"
                             height="30"
                             :y="5 + 35*index"
+                            x="2"
+                            rx="5"
                         />
                         <text
                             class="bar--text"
-                            x="2"
+                            x="10"
                             :y="25 + 35*index"
                         >{{data.option}} - {{data.vote}} votes</text>
                     </g>
@@ -156,6 +165,7 @@ export default {
             max: 0,
             optionsColors: [],
             showResults: false,
+            voting: false,
         };
     },
     watch: {
@@ -247,12 +257,13 @@ export default {
     methods: {
         retry: function () {
             this.skipQuery = false;
-            this.$apollo.queries.feed.refetch();
+            this.$apollo.queries.poll.refetch();
         },
         translate: function (data) {
             return `translate(-${100 - data})`;
         },
         vote: async function () {
+            this.voting = true;
             const result = await this.$apollo.mutate({
                 // Query
                 mutation: VOTE_OPTION,
@@ -273,6 +284,7 @@ export default {
                     });
                 }
             }, 100);
+            this.voting = false;
         },
     },
     head() {
@@ -341,13 +353,29 @@ export default {
     margin: 10px 10px;
 }
 
+.result {
+    padding: 10px;
+    height: 100%;
+    background: var(--card-bg);
+    border-radius: 10px;
+    margin: 0 10px;
+}
+
+.result--title {
+    font-size: 2em;
+    margin: 5px 0;
+}
+
 figure {
     padding: 10px;
     height: 100%;
+    background: var(--card-bg);
+    border-radius: 10px;
+    margin: 0 10px;
 }
 
-figcaption {
-    margin-bottom: 20px;
+.result--list {
+    margin: 5px 0;
 }
 
 .result--item {
@@ -358,15 +386,14 @@ figcaption {
 }
 
 .result--box {
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     background: red;
     margin: 0 5px;
 }
 
 .bar {
-    cursor: pointer;
     font-family: Helvetica, sans-serif;
     -webkit-transition: 0.5s all;
     transition: 0.5s all;
@@ -374,10 +401,12 @@ figcaption {
 
 .bar rect {
     transition: 1s all;
+    stroke-width: 3px;
+    paint-order: stroke;
 }
 
 .bar--text {
-    color: var(--text-color);
+    fill: var(--text-svg);
 }
 
 @media screen and (min-width: 768px) and (max-width: 1025px) {

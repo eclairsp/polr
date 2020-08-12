@@ -1,11 +1,11 @@
 <template>
     <div class="theme">
-        <label for="check">
+        <label :for="id">
             <slot></slot>
         </label>
         <div class="theme--toggle">
             <input
-                id="check"
+                :id="id"
                 aria-label="Switch themes"
                 type="checkbox"
                 name="theme--switcher"
@@ -20,6 +20,9 @@
 
 <script>
 export default {
+    props: {
+        id: String,
+    },
     data() {
         return {
             flag: false,

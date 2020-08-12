@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section :class="full ? '' : 'mini'">
         <div id="wave-container" class="wave-container">
             <div class="dot" id="d1"></div>
             <div class="dot" id="d2"></div>
@@ -16,7 +16,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+    props: {
+        full: Boolean,
+    },
+};
 </script>
 
 <style scoped>
@@ -26,6 +30,10 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.mini {
+    height: 100%;
 }
 
 #wave-container {

@@ -1,114 +1,121 @@
 <template>
-    <section>
-        <label for="title">Title</label>
-        <textInput
-            :class="errorClass[0]"
-            id="title"
-            v-bind:value="title"
-            @typing="refreshInput"
-            v-on:input="title = $event"
-            placeholder="Enter title..."
-        />
-
-        <toggle @toggled="changePrivate">Private</toggle>
-        <transition name="fade">
-            <label v-if="privatePoll" key="label" for="password">Password</label>
-        </transition>
-        <transition name="fade">
+    <transition name="fade">
+        <loading :full="true" v-if="pollLoading" />
+        <section v-if="!pollLoading">
+            <label for="title">Title</label>
             <textInput
-                :class="errorClass[1]"
-                v-if="privatePoll"
-                key="passwordInput"
-                id="password"
-                v-bind:value="password"
+                :class="errorClass[0]"
+                id="title"
+                v-bind:value="title"
                 @typing="refreshInput"
-                v-on:input="password = $event"
-                placeholder="Enter password..."
-                type="password"
+                v-on:input="title = $event"
+                placeholder="Enter title..."
             />
-        </transition>
 
-        <label for="description">Description</label>
-        <textarea
-            v-on:keyup="refreshInput"
-            :class="errorClass[2]"
-            id="description"
-            v-model="description"
-        />
-
-        <label for="options">Options</label>
-        <transition name="fade">
-            <transition-group name="list" v-if="options.length != 0" tag="ul">
-                <li v-for="(option, index) in options" :key="option">
-                    <span>
-                        <p>{{option}}</p>
-                        <btn class="remove--margin" @clicked="removeOption(index)">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="25"
-                                height="25"
-                                viewBox="0 0 512 512"
-                            >
-                                <title>Remove</title>
-                                <line
-                                    x1="368"
-                                    y1="368"
-                                    x2="144"
-                                    y2="144"
-                                    style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
-                                />
-                                <line
-                                    x1="368"
-                                    y1="144"
-                                    x2="144"
-                                    y2="368"
-                                    style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
-                                />
-                            </svg>
-                        </btn>
-                    </span>
-                </li>
-            </transition-group>
-        </transition>
-
-        <searchbar
-            :class="errorClass[3]"
-            @clicked="addOption"
-            v-bind:value="option"
-            v-on:input="option = $event"
-            @typing="refreshInput"
-            placeholder="Add options..."
-        >
-            <svg class="searchbar--icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <title>Add</title>
-                <line
-                    x1="256"
-                    y1="112"
-                    x2="256"
-                    y2="400"
-                    style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+            <toggle id="private" @toggled="changePrivate">Private</toggle>
+            <transition name="fade">
+                <label v-if="privatePoll" key="label" for="password">Password</label>
+            </transition>
+            <transition name="fade">
+                <textInput
+                    :class="errorClass[1]"
+                    v-if="privatePoll"
+                    key="passwordInput"
+                    id="password"
+                    v-bind:value="password"
+                    @typing="refreshInput"
+                    v-on:input="password = $event"
+                    placeholder="Enter password..."
+                    type="password"
                 />
-                <line
-                    x1="400"
-                    y1="256"
-                    x2="112"
-                    y2="256"
-                    style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
-                />
-            </svg>
-        </searchbar>
+            </transition>
 
-        <toggle @toggled="changeMultiple">Multiple Options</toggle>
+            <label for="description">Description</label>
+            <textarea
+                v-on:keyup="refreshInput"
+                :class="errorClass[2]"
+                id="description"
+                v-model="description"
+            />
 
-        <btn class @clicked="submitList">Submit List</btn>
-        <transition name="fade">
-            <section class="error--message" v-if="errorMessage">
-                <transition name="fade" mode="out-in">
-                    <h3 :key="errorMessage">{{errorMessage}}</h3>
-                </transition>
-            </section>
-        </transition>
-    </section>
+            <label for="options">Options</label>
+            <transition name="fade">
+                <transition-group name="list" v-if="options.length != 0" tag="ul">
+                    <li v-for="(option, index) in options" :key="option">
+                        <span>
+                            <p>{{option}}</p>
+                            <btn class="remove--margin" @clicked="removeOption(index)">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="25"
+                                    height="25"
+                                    viewBox="0 0 512 512"
+                                >
+                                    <title>Remove</title>
+                                    <line
+                                        x1="368"
+                                        y1="368"
+                                        x2="144"
+                                        y2="144"
+                                        style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                                    />
+                                    <line
+                                        x1="368"
+                                        y1="144"
+                                        x2="144"
+                                        y2="368"
+                                        style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                                    />
+                                </svg>
+                            </btn>
+                        </span>
+                    </li>
+                </transition-group>
+            </transition>
+
+            <searchbar
+                :class="errorClass[3]"
+                @clicked="addOption"
+                v-bind:value="option"
+                v-on:input="option = $event"
+                @typing="refreshInput"
+                placeholder="Add options..."
+            >
+                <svg
+                    class="searchbar--icons"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                >
+                    <title>Add</title>
+                    <line
+                        x1="256"
+                        y1="112"
+                        x2="256"
+                        y2="400"
+                        style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                    />
+                    <line
+                        x1="400"
+                        y1="256"
+                        x2="112"
+                        y2="256"
+                        style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                    />
+                </svg>
+            </searchbar>
+
+            <toggle id="multipleOptions" @toggled="changeMultiple">Multiple Options</toggle>
+
+            <btn key="notLoading" v-if="!pollLoading" @clicked="submitList">Submit List</btn>
+            <transition name="fade">
+                <section class="error--message" v-if="errorMessage">
+                    <transition name="fade" mode="out-in">
+                        <h3 :key="errorMessage">{{errorMessage}}</h3>
+                    </transition>
+                </section>
+            </transition>
+        </section>
+    </transition>
 </template>
 
 <script>
@@ -117,6 +124,8 @@ import textInput from "../components/textInput";
 import btn from "../components/btn";
 import toggle from "../components/toggle";
 import searchbar from "../components/searchbar";
+import loading from "../components/loading";
+import error from "../components/error";
 
 const NEW_POLL = gql`
     mutation createPoll(
@@ -156,6 +165,8 @@ export default {
             errorClass: ["", "", "", ""],
             errorMessage: "",
             multipleOption: false,
+            pollLoading: false,
+            pollError: false,
         };
     },
     head() {
@@ -234,6 +245,7 @@ export default {
                 password,
                 options,
             } = this;
+            this.pollLoading = true;
             const result = await this.$apollo.mutate({
                 // Query
                 mutation: NEW_POLL,
@@ -247,6 +259,7 @@ export default {
                     options,
                 },
             });
+
             if (result.data.createPoll.privatePoll) {
                 this.$router.push({
                     name: "poll-id",
@@ -258,6 +271,7 @@ export default {
                     params: { id: result.data.createPoll._id },
                 });
             }
+            this.pollLoading = false;
         },
         changePrivate: function () {
             this.privatePoll = !this.privatePoll;
@@ -282,6 +296,8 @@ export default {
         btn,
         toggle,
         searchbar,
+        loading,
+        error,
     },
 };
 </script>

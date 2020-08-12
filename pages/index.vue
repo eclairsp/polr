@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loading v-if="$apollo.loading" />
+        <loading :full="true" v-if="$apollo.loading" />
         <error @retry="retry" v-else-if="error" title="Can't get polls." description="Try later" />
         <transition-group v-else name="list" appear tag="ul">
             <li v-for="poll in polls" :key="poll._id">
