@@ -64,7 +64,7 @@ label {
     background: var(--primary-3);
     padding: 5px;
     height: max-content;
-    width: 80px;
+    width: 50px;
     border-radius: 100px;
     margin: 0 0 10px 0;
     display: flex;
@@ -88,8 +88,8 @@ label {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 100px;
     transition: 0.5s transform, 0.5s background;
 }
@@ -103,6 +103,6 @@ label {
 }
 
 .theme--check--switch:checked ~ .ball {
-    transform: translateX(40px);
+    transform: translateX(20px);
 }
 </style>

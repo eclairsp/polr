@@ -25,7 +25,7 @@ export default {
     color: var(--text-color);
     padding: 10px;
     box-shadow: 0px 5px 10px var(--shadow);
-    margin: 12px 10px;
+    margin: 12px 0px;
 }
 
 .poll--card--title {

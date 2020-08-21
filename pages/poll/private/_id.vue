@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <loading :full="true" v-if="$apollo.queries.pollPrivate.loading && passwordCorrect" />
+        <loading :full="true" v-if="$apollo.queries.pollPrivate.loading" />
         <error v-else-if="errorMessage" @retry="retry" :title="error" description="Try later" />
         <section
             v-if="!$apollo.queries.pollPrivate.loading && !errorMessage && passwordCorrect "
@@ -67,57 +67,11 @@
                 <section v-if="voting" class="result">
                     <loading :full="false" />
                 </section>
-                <figure
-                    id="result"
+                <template
                     v-if="!errorMessage && !$apollo.queries.pollPrivate.loading && showResults && !voting"
                 >
-                    <figcaption>
-                        <h1 class="result--title">Results</h1>
-                        <ul class="result--list">
-                            <li
-                                class="result--item"
-                                v-for="(color, index) in optionsColors"
-                                :key="color"
-                            >
-                                <div class="result--box" :style="{background: color}"></div>
-                                {{pollPrivate.options[index].option}} - {{pollPrivate.options[index].vote}}
-                            </li>
-                        </ul>
-                    </figcaption>
-                    <svg
-                        version="1.1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        class="chart"
-                        width="100%"
-                        :height="pollPrivate.options.length * 40"
-                        aria-labelledby="title"
-                        role="img"
-                    >
-                        <title id="title">A bart chart showing information</title>
-                        <g
-                            v-for="(data, index) in pollPrivate.options"
-                            class="bar"
-                            :key="data.option"
-                        >
-                            <rect
-                                stroke="black"
-                                stroke-alignment="inside"
-                                :fill="optionsColors[index]"
-                                :width="`${((data.vote / max) * 100) - 1}%`"
-                                height="30"
-                                :y="5 + 35*index"
-                                x="2"
-                                rx="5"
-                            />
-                            <text
-                                class="bar--text"
-                                x="10"
-                                :y="25 + 35*index"
-                            >{{data.option}} - {{data.vote}} votes</text>
-                        </g>
-                    </svg>
-                </figure>
+                    <result :options="pollPrivate.options" />
+                </template>
             </transition>
         </section>
         <div v-if="!passwordCorrect">
@@ -126,6 +80,7 @@
                 v-bind:value="password"
                 v-on:input="password = $event"
                 @typing="refreshInput"
+                @enter="validatePassword"
                 type="password"
                 placeholder="Enter password for Poll."
             />
@@ -147,6 +102,7 @@ import loading from "../../../components/loading";
 import error from "../../../components/error";
 import textInput from "../../../components/textInput";
 import btn from "../../../components/btn";
+import result from "../../../components/result";
 
 const PRIVATE_POLL = gql`
     query privatePoll($id: ID!, $password: String!) {
@@ -203,9 +159,6 @@ export default {
                 month: "long",
                 day: "numeric",
             },
-            totalVotes: 0,
-            max: 0,
-            optionsColors: [],
             showResults: false,
             voting: false,
             password: "",
@@ -214,49 +167,13 @@ export default {
             errorClass: "",
         };
     },
-    watch: {
-        pollPrivate: function (poll) {
-            this.max = Math.max(
-                ...poll.options.map((option) => option.vote),
-                0
-            );
-
-            let totalVotes = 0;
-            this.pollPrivate.options.forEach(
-                (element) => (totalVotes += element.vote)
-            );
-
-            this.totalVotes = totalVotes;
-
-            // Get a random hue value 0-360
-            const randHue = () => Math.floor(360 * Math.random());
-
-            // Get a random value for Saturation and Lightness
-            const randSaturation = () => Math.random() * (80 - 20) + 20;
-
-            // Get a random value for Lightness
-            const randLightness = () => Math.random() * (60 - 40) + 40;
-
-            const colors = this.pollPrivate.options.map((_, index) => {
-                return (
-                    "hsl(" +
-                    randHue() +
-                    "," +
-                    randSaturation() +
-                    "%," +
-                    randLightness() +
-                    "%)"
-                );
-            });
-            this.optionsColors = [...colors];
-        },
-    },
     methods: {
         retry: function () {
             this.skipQuery = false;
             this.$apollo.queries.pollPrivate.refetch();
         },
         validatePassword: function () {
+            console.log("checking");
             if (this.password.length === 0) {
                 this.password = "";
                 this.errorMessage = "Cant keep blank.";
@@ -290,15 +207,7 @@ export default {
             });
             this.showResults = true;
             this.voteFor = [];
-            setTimeout(() => {
-                if (process.client && this.showResults) {
-                    document.getElementById("result").scrollIntoView({
-                        behavior: "smooth",
-                        block: "end",
-                        inline: "nearest",
-                    });
-                }
-            }, 100);
+
             this.voting = false;
         },
     },
@@ -340,7 +249,6 @@ export default {
                 },
                 // Mutate the previous result
                 updateQuery: (previousResult, { subscriptionData }) => {
-                    console.log(previousResult, subscriptionData);
                     if (
                         previousResult.pollPrivate._id ===
                         subscriptionData.data.newVote._id
@@ -362,6 +270,7 @@ export default {
         btn,
         loading,
         error,
+        result,
     },
     head() {
         return {

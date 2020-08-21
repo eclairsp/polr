@@ -48,53 +48,9 @@
             <section v-if="voting" class="result">
                 <loading :full="false" />
             </section>
-            <figure
-                id="result"
-                v-if="!error && !$apollo.queries.poll.loading && showResults && !voting"
-            >
-                <figcaption>
-                    <h1 class="result--title">Results</h1>
-                    <ul class="result--list">
-                        <li
-                            class="result--item"
-                            v-for="(color, index) in optionsColors"
-                            :key="color"
-                        >
-                            <div class="result--box" :style="{background: color}"></div>
-                            {{poll.options[index].option}} - {{poll.options[index].vote}}
-                        </li>
-                    </ul>
-                </figcaption>
-                <svg
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    class="chart"
-                    width="100%"
-                    :height="poll.options.length * 40"
-                    aria-labelledby="title"
-                    role="img"
-                >
-                    <title id="title">A bart chart showing information</title>
-                    <g v-for="(data, index) in poll.options" class="bar" :key="data.option">
-                        <rect
-                            stroke="black"
-                            stroke-alignment="inside"
-                            :fill="optionsColors[index]"
-                            :width="`${((data.vote / max) * 100) - 1}%`"
-                            height="30"
-                            :y="5 + 35*index"
-                            x="2"
-                            rx="5"
-                        />
-                        <text
-                            class="bar--text"
-                            x="10"
-                            :y="25 + 35*index"
-                        >{{data.option}} - {{data.vote}} votes</text>
-                    </g>
-                </svg>
-            </figure>
+            <template v-if="!error && !$apollo.queries.poll.loading && showResults && !voting">
+                <result :options="poll.options" />
+            </template>
         </transition>
     </section>
 </template>
@@ -104,6 +60,7 @@ import gql from "graphql-tag";
 import loading from "../../components/loading";
 import error from "../../components/error";
 import btn from "../../components/btn";
+import result from "../../components/result";
 
 const ALL_FEEDS_QUERY = gql`
     query Poll($id: ID!) {
@@ -161,49 +118,9 @@ export default {
                 month: "long",
                 day: "numeric",
             },
-            totalVotes: 0,
-            max: 0,
-            optionsColors: [],
             showResults: false,
             voting: false,
         };
-    },
-    watch: {
-        poll: function (poll) {
-            this.max = Math.max(
-                ...poll.options.map((option) => option.vote),
-                0
-            );
-
-            let totalVotes = 0;
-            this.poll.options.forEach(
-                (element) => (totalVotes += element.vote)
-            );
-
-            this.totalVotes = totalVotes;
-
-            // Get a random hue value 0-360
-            const randHue = () => Math.floor(360 * Math.random());
-
-            // Get a random value for Saturation and Lightness
-            const randSaturation = () => Math.random() * (80 - 20) + 20;
-
-            // Get a random value for Lightness
-            const randLightness = () => Math.random() * (60 - 40) + 40;
-
-            const colors = this.poll.options.map((_, index) => {
-                return (
-                    "hsl(" +
-                    randHue() +
-                    "," +
-                    randSaturation() +
-                    "%," +
-                    randLightness() +
-                    "%)"
-                );
-            });
-            this.optionsColors = [...colors];
-        },
     },
     apollo: {
         poll: {
@@ -232,7 +149,6 @@ export default {
                 },
                 // Mutate the previous result
                 updateQuery: (previousResult, { subscriptionData }) => {
-                    console.log(previousResult, subscriptionData);
                     if (
                         previousResult.poll._id ===
                         subscriptionData.data.newVote._id
@@ -253,6 +169,7 @@ export default {
         loading,
         error,
         btn,
+        result,
     },
     methods: {
         retry: function () {
@@ -275,15 +192,7 @@ export default {
             });
             this.showResults = true;
             this.voteFor = [];
-            setTimeout(() => {
-                if (process.client && this.showResults) {
-                    document.getElementById("result").scrollIntoView({
-                        behavior: "smooth",
-                        block: "end",
-                        inline: "nearest",
-                    });
-                }
-            }, 100);
+
             this.voting = false;
         },
     },
@@ -359,54 +268,6 @@ export default {
     background: var(--card-bg);
     border-radius: 10px;
     margin: 0 10px;
-}
-
-.result--title {
-    font-size: 2em;
-    margin: 5px 0;
-}
-
-figure {
-    padding: 10px;
-    height: 100%;
-    background: var(--card-bg);
-    border-radius: 10px;
-    margin: 0 10px;
-}
-
-.result--list {
-    margin: 5px 0;
-}
-
-.result--item {
-    display: flex;
-    margin: 5px 0;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.result--box {
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    background: red;
-    margin: 0 5px;
-}
-
-.bar {
-    font-family: Helvetica, sans-serif;
-    -webkit-transition: 0.5s all;
-    transition: 0.5s all;
-}
-
-.bar rect {
-    transition: 1s all;
-    stroke-width: 3px;
-    paint-order: stroke;
-}
-
-.bar--text {
-    fill: var(--text-svg);
 }
 
 @media screen and (min-width: 768px) and (max-width: 1025px) {

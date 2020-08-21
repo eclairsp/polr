@@ -57,6 +57,7 @@ export default {
     height: 100%;
     margin: 0;
     z-index: 5;
+    width: 95vw;
 }
 
 .nuxt--container {
@@ -66,7 +67,6 @@ export default {
     min-height: calc(100vh - 83px);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    padding-top: 20px;
 }
 
 .svg--wave {

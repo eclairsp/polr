@@ -129,22 +129,26 @@ html {
 .list-move {
     transition: 0.3s cubic-bezier(0.59, 0.12, 0.34, 0.95);
     transition-property: opacity, transform;
+    width: 100%;
 }
 
 .list-enter {
     opacity: 0;
     transform: translateX(50px) scaleY(0.5);
+    width: 100%;
 }
 
 .list-enter-to {
     opacity: 1;
     transform: translateX(0) scaleY(1);
+    width: 100%;
 }
 
 .list-leave-to {
     opacity: 0;
     transform: scaleY(0);
     transform-origin: center top;
+    width: 100%;
 }
 
 @media screen and (min-width: 1024px) {
