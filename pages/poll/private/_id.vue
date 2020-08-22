@@ -357,62 +357,6 @@ div {
     margin: 10px 10px;
 }
 
-.result {
-    padding: 10px;
-    height: 100%;
-    background: var(--card-bg);
-    border-radius: 10px;
-    margin: 0 10px;
-}
-
-.result--title {
-    font-size: 2em;
-    margin: 5px 0;
-}
-
-figure {
-    padding: 10px;
-    height: 100%;
-    background: var(--card-bg);
-    border-radius: 10px;
-    margin: 0 10px;
-}
-
-.result--list {
-    margin: 5px 0;
-}
-
-.result--item {
-    display: flex;
-    margin: 5px 0;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.result--box {
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    background: red;
-    margin: 0 5px;
-}
-
-.bar {
-    font-family: Helvetica, sans-serif;
-    -webkit-transition: 0.5s all;
-    transition: 0.5s all;
-}
-
-.bar rect {
-    transition: 1s all;
-    stroke-width: 3px;
-    paint-order: stroke;
-}
-
-.bar--text {
-    fill: var(--text-svg);
-}
-
 @media screen and (min-width: 768px) and (max-width: 1025px) {
 }
 @media screen and (min-width: 1025px) and (max-width: 1336px) {

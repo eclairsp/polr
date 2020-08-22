@@ -2,8 +2,8 @@
     <div>
         <loading :full="true" v-if="$apollo.loading" />
         <error @retry="retry" v-else-if="error" title="Can't get polls." description="Try later" />
-        <transition-group v-else name="list" appear tag="ul">
-            <li v-for="poll in polls" :key="poll._id">
+        <transition-group v-else name="list" appear tag="ul" class="card--list">
+            <li class="card--shadow" v-for="poll in polls" :key="poll._id">
                 <card
                     v-if="!$apollo.loading && !error"
                     :index="poll._id"
@@ -88,5 +88,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.card--list {
+    padding: 10px;
+    width: 100%;
+}
+
+.card--shadow {
+    box-shadow: 0px 5px 10px var(--shadow);
+    margin: 12px 0px;
+    border-radius: 10px;
+}
 </style>

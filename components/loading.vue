@@ -33,7 +33,10 @@ section {
 }
 
 .mini {
+    padding: 10px;
     height: 100%;
+    background: var(--card-bg);
+    border-radius: 10px;
 }
 
 #wave-container {

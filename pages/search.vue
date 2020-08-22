@@ -25,7 +25,7 @@
         </searchbar>
         <loading v-if="$apollo.queries.search.loading" :full="false" />
         <transition-group name="list" appear tag="ul">
-            <li v-for="poll in search" :key="poll._id">
+            <li class="card--shadow" v-for="poll in search" :key="poll._id">
                 <card
                     v-if="!$apollo.loading && !error"
                     :index="poll._id"
@@ -120,5 +120,7 @@ section {
     padding: 10px;
     padding-top: 0;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 </style>

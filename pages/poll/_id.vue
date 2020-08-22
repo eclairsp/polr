@@ -264,10 +264,6 @@ export default {
 
 .result {
     padding: 10px;
-    height: 100%;
-    background: var(--card-bg);
-    border-radius: 10px;
-    margin: 0 10px;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1025px) {

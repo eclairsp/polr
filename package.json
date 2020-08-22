@@ -8,7 +8,8 @@
         "start": "nuxt start",
         "export": "nuxt export",
         "serve": "nuxt serve",
-        "heroku-postbuild": "npm run build"
+        "heroku-postbuild": "npm run build",
+        "deploy": "git push heroku master"
     },
     "dependencies": {
         "@nuxtjs/apollo": "^4.0.1-rc.1",

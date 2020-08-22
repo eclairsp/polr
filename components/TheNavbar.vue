@@ -257,7 +257,7 @@ export default {
 nav {
     background: var(--nav-bg);
     width: 80vw;
-    border-radius: 100px;
+    border-radius: 10px;
     position: fixed;
     bottom: 20px;
     left: 0;
@@ -280,7 +280,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
+    border-radius: 10px;
 }
 
 .nav--bar {
@@ -309,7 +309,6 @@ nav {
 @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     nav {
         width: 40vw;
-        border-radius: 100px;
         position: fixed;
         bottom: 20px;
         right: 40px;
@@ -332,7 +331,6 @@ nav {
 @media screen and (min-width: 1024px) and (max-width: 1336px) {
     nav {
         width: 30vw;
-        border-radius: 100px;
         position: fixed;
         bottom: 20px;
         right: 40px;
@@ -344,7 +342,6 @@ nav {
 @media screen and (min-width: 1336px) {
     nav {
         width: 20vw;
-        border-radius: 100px;
         position: fixed;
         bottom: 20px;
         right: 40px;

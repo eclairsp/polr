@@ -3,7 +3,7 @@
         <label :for="id">
             <slot></slot>
         </label>
-        <div class="theme--toggle">
+        <div :class="{'theme--toggle': true, false: !flag, true: flag}">
             <input
                 :id="id"
                 aria-label="Switch themes"
@@ -13,7 +13,7 @@
                 @click="toggle"
                 v-model="flag"
             />
-            <section :class="ballClass"></section>
+            <section class="ball"></section>
         </div>
     </div>
 </template>
@@ -26,19 +26,11 @@ export default {
     data() {
         return {
             flag: false,
-            ballClass: "ball false",
         };
     },
     methods: {
         toggle: function () {
-            if (this.flag) {
-                this.ballClass = "ball false";
-                this.flag = false;
-            } else {
-                this.ballClass = "ball true";
-                this.flag = true;
-                this.indicator = "Y";
-            }
+            this.flag = !this.flag;
             this.$emit("toggled");
         },
     },
@@ -64,8 +56,8 @@ label {
     background: var(--primary-3);
     padding: 5px;
     height: max-content;
-    width: 50px;
-    border-radius: 100px;
+    width: 60px;
+    border-radius: 10px;
     margin: 0 0 10px 0;
     display: flex;
     align-items: center;
@@ -90,8 +82,9 @@ label {
     align-items: center;
     width: 20px;
     height: 20px;
-    border-radius: 100px;
-    transition: 0.5s transform, 0.5s background;
+    border-radius: 50%;
+    transition: 0.5s transform;
+    background: var(--primary-3);
 }
 
 .false {
@@ -103,6 +96,6 @@ label {
 }
 
 .theme--check--switch:checked ~ .ball {
-    transform: translateX(20px);
+    transform: translateX(30px);
 }
 </style>
