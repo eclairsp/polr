@@ -1,5 +1,6 @@
 {
     "name": "polr",
+    "description": "Get a poll going!",
     "version": "1.0.0",
     "private": true,
     "scripts": {

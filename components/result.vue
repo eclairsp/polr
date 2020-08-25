@@ -95,6 +95,15 @@ export default {
             return totalVotes;
         },
     },
+    mounted() {
+        if (process.client) {
+            document.getElementById("result").scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+                inline: "nearest",
+            });
+        }
+    },
 };
 </script>
 
@@ -109,7 +118,7 @@ figure {
     height: 100%;
     background: var(--card-bg);
     border-radius: 10px;
-    margin: 0 10px;
+    margin: 10px 10px;
 }
 
 .result--list {

@@ -12,7 +12,7 @@
                 />
             </li>
         </transition-group>
-        <h1 v-if="polls.length === 0">No polls found.</h1>
+        <card v-if="polls.length === 0 && !$apollo.loading" title="No polls found!" />
     </div>
 </template>
 

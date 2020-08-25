@@ -10,30 +10,13 @@
             >{{new Date(poll.createdAt).toLocaleDateString("en-US", dateOptions)}}</p>
         </div>
         <transition name="fade" mode="out-in">
-            <ul
-                v-if="!error && !$apollo.queries.poll.loading && poll.multipleOption"
-                key="multiple"
-            >
+            <ul v-if="!error && !$apollo.queries.poll.loading" key="multiple">
                 <li class="option--item" v-for="option in poll.options" :key="option._id">
                     <section class="option">
                         <input
                             class="indicator"
                             :id="option._id"
-                            type="checkbox"
-                            :value="option._id"
-                            v-model="voteFor"
-                        />
-                        <label class="option--text" :for="option._id">{{option.option}}</label>
-                    </section>
-                </li>
-            </ul>
-            <ul v-if="!error && !$apollo.queries.poll.loading && !poll.multipleOption" key="single">
-                <li class="option--item" v-for="option in poll.options" :key="option._id">
-                    <section class="option">
-                        <input
-                            class="indicator"
-                            :id="option._id"
-                            type="radio"
+                            :type="poll.multipleOption ? 'checkbox' : 'radio'"
                             :value="option._id"
                             v-model="voteFor"
                         />
