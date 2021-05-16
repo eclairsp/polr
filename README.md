@@ -1,5 +1,10 @@
 # polr
 
+A graphql based api to create polls. Anyone can vote.
+The website may take some time to load as backend is hosted on free Heroku server which sleeps due to inactivity.
+[Demo](https://polrr.herokuapp.com/)
+
+
 ## Build Setup
 
 ```bash
