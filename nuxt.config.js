@@ -67,7 +67,7 @@ export default {
         clientConfigs: {
             default: {
                 // required
-                httpEndpoint: "https://polr-api.herokuapp.com/graphql",
+                httpEndpoint: "polrapi-production.up.railway.app/graphql",
                 // optional
                 // override HTTP endpoint in browser only
                 // optional
