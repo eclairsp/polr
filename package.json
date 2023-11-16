@@ -20,5 +20,8 @@
     },
     "devDependencies": {
         "@nuxtjs/color-mode": "^1.0.2"
+    },
+    "engines": {
+        "node": "16.x"
     }
 }
